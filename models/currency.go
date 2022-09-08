@@ -5,7 +5,6 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-// user struct fields used in db
 type Currency struct {
 	ID           uint64         `gorm:"primary_key;auto_increment" json:"currency_id"`
 	Code         string         `gorm:"size:8;not null;" json:"code"`

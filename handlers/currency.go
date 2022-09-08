@@ -7,7 +7,6 @@ import (
 	"github.com/denizedizcan/Golang-Curmin/responses"
 )
 
-// create user handler
 func (h handler) ShowCurrency(w http.ResponseWriter, r *http.Request) {
 
 	currencies, err := models.FindAllCurrencys(h.DB)

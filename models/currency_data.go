@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-// user struct fields used in db
 type CurrencyData struct {
 	ID   uint64    `gorm:"primary_key;auto_increment" json:"currency_id"`
 	Base string    `gorm:"size:8;not null;" json:"name"`
