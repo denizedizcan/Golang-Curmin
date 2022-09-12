@@ -2,7 +2,7 @@
 
 You have to make sure that you are in the **docs directory inside the project**.
 
-`cd /Golang-Curmin/db`
+`cd /Golang-Curmin/common/db`
 
 **init-db.sql** file is used to initialize the database.
 
