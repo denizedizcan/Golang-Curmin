@@ -2,20 +2,26 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
-	"github.com/denizedizcan/Golang-Curmin/db"
+	config "github.com/denizedizcan/Golang-Curmin/common/config/envs"
+	"github.com/denizedizcan/Golang-Curmin/common/db"
 	"github.com/denizedizcan/Golang-Curmin/handlers"
 	"github.com/denizedizcan/Golang-Curmin/middlewares"
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
 )
 
 // start the app and handle routes
 func main() {
 	fmt.Println("Starting App..")
-	godotenv.Load()
-	DB := db.Init()
+	c, err := config.LoadConfig()
+
+	if err != nil {
+		log.Fatalln("Failed at config", err)
+	}
+	DB := db.Init(c.User, c.Password, c.Host, c.Port, c.DBname)
+
 	h := handlers.New(DB)
 	router := mux.NewRouter()
 	router.HandleFunc("api/currencies", middlewares.SetMiddlewareJSON(h.ShowCurrency)).Methods("POST")
