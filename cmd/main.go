@@ -30,12 +30,15 @@ func main() {
 
 	h := handlers.New(DB)
 	router := mux.NewRouter()
-	router.HandleFunc("api/currencies", middlewares.SetMiddlewareJSON(h.ShowCurrency)).Methods("POST")
+	router.HandleFunc("/api/currencies", middlewares.SetMiddlewareJSON(h.ShowCurrency)).Methods("GET")
+	router.HandleFunc("/api/currencies/list", middlewares.SetMiddlewareJSON(h.InsertCurrency)).Methods("POST")
+	fmt.Println("routes ..")
 	/*
 		router.HandleFunc("api/timeseries", middlewares.SetMiddlewareJSON()).Methods("GET")
 		router.HandleFunc("api/latest", middlewares.SetMiddlewareJSON()).Methods("GET")
 	*/
 	http.ListenAndServe(":8080", router)
+
 }
 
 func initDB(c config.Config) {
