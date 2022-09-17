@@ -7,20 +7,26 @@ import (
 
 	config "github.com/denizedizcan/Golang-Curmin/common/config/envs"
 	"github.com/denizedizcan/Golang-Curmin/common/db"
-	"github.com/denizedizcan/Golang-Curmin/handlers"
-	"github.com/denizedizcan/Golang-Curmin/middlewares"
+	"github.com/denizedizcan/Golang-Curmin/common/handlers"
+	"github.com/denizedizcan/Golang-Curmin/common/middlewares"
 	"github.com/gorilla/mux"
+	"gorm.io/gorm"
+)
+
+var (
+	c   config.Config
+	DB  *gorm.DB
+	err error
 )
 
 // start the app and handle routes
+func init() {
+	initConfig()
+	initDB(c)
+}
+
 func main() {
 	fmt.Println("Starting App..")
-	c, err := config.LoadConfig()
-
-	if err != nil {
-		log.Fatalln("Failed at config", err)
-	}
-	DB := db.Init(c.User, c.Password, c.Host, c.Port, c.DBname)
 
 	h := handlers.New(DB)
 	router := mux.NewRouter()
@@ -30,4 +36,17 @@ func main() {
 		router.HandleFunc("api/latest", middlewares.SetMiddlewareJSON()).Methods("GET")
 	*/
 	http.ListenAndServe(":8080", router)
+}
+
+func initDB(c config.Config) {
+	DB = db.Init(c.User, c.Password, c.Host, c.Port, c.DBname)
+	fmt.Println("db")
+}
+
+func initConfig() {
+	c, err = config.LoadConfig()
+	if err != nil {
+		log.Fatalln("Failed at config", err)
+	}
+	fmt.Println("config")
 }

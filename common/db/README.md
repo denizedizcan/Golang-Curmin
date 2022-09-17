@@ -24,7 +24,7 @@ You have to make sure that you are in the **docs directory inside the project**.
 
 **Example:**
 
-`docker run -d --name curmin  -e POSTGRES_USER=pg -e POSTGRES_PASSWORD=passw -e POSTGRES_DB=postgres -p 5432:5432 postgresql-img:latest`
+`docker run -d --name curmin  -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=passw -e POSTGRES_DB=postgres -p 5432:5432 postgresql-img:latest`
 
 **Note:** You can give volume path as projects db folder.
 

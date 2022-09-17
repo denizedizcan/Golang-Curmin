@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/denizedizcan/Golang-Curmin/common/responses"
 	"github.com/denizedizcan/Golang-Curmin/pkg/currency"
-	"github.com/denizedizcan/Golang-Curmin/responses"
 )
 
 func (h handler) ShowCurrency(w http.ResponseWriter, r *http.Request) {
