@@ -14,3 +14,11 @@ func GetCurrencies(db *gorm.DB) ([]models.Currency, error) {
 	}
 	return currencies, nil
 }
+
+func GetCurrencyId(base string, db *gorm.DB) (uint64, error) {
+	var currency models.Currency
+	if result := db.Model(models.Currency{}).Preload(clause.Associations).Where("code = ?", base).First(&currency); result.Error != nil {
+		return 0, result.Error
+	}
+	return currency.ID, nil
+}

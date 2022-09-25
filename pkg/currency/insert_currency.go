@@ -11,3 +11,10 @@ func InsertCurrency(db *gorm.DB, c []models.Currency) error {
 	}
 	return nil
 }
+
+func InsertCurrencyData(db *gorm.DB, c []models.CurrencyData) error {
+	if result := db.Create(&c); result.Error != nil {
+		return result.Error
+	}
+	return nil
+}

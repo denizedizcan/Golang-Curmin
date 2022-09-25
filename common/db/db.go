@@ -13,7 +13,6 @@ import (
 func Init(user, password, host, port, db_name string) *gorm.DB {
 	dsn := "host=%s user=%s password=%s dbname=%s port=%s sslmode=disable"
 	dbUrl := fmt.Sprintf(dsn, host, user, password, db_name, port)
-	fmt.Printf("db url: %s", dbUrl)
 	db, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
 	if err != nil {
 		fmt.Printf("Cannot connect to %s database", postgres.Open(dbUrl))

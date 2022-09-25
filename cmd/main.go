@@ -32,7 +32,9 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/currencies", middlewares.SetMiddlewareJSON(h.ShowCurrency)).Methods("GET")
 	router.HandleFunc("/api/currencies/list", middlewares.SetMiddlewareJSON(h.InsertCurrency)).Methods("POST")
-	fmt.Println("routes ..")
+	router.HandleFunc("/api/currencies/data/list", middlewares.SetMiddlewareJSON(h.InsertCurrencyData)).Methods("POST")
+	router.HandleFunc("/api/currencies/data/all", middlewares.SetMiddlewareJSON(h.InsertAllCurrencyData)).Methods("POST")
+
 	/*
 		router.HandleFunc("api/timeseries", middlewares.SetMiddlewareJSON()).Methods("GET")
 		router.HandleFunc("api/latest", middlewares.SetMiddlewareJSON()).Methods("GET")
@@ -43,7 +45,6 @@ func main() {
 
 func initDB(c config.Config) {
 	DB = db.Init(c.User, c.Password, c.Host, c.Port, c.DBname)
-	fmt.Println("db")
 }
 
 func initConfig() {
@@ -51,5 +52,4 @@ func initConfig() {
 	if err != nil {
 		log.Fatalln("Failed at config", err)
 	}
-	fmt.Println("config")
 }
