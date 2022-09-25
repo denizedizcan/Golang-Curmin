@@ -55,7 +55,7 @@ func GetCurrencyByBaseAndTarget(base, target string, db *gorm.DB) (models.Curren
 	//result := db.Preload("currency_data", "base = ?", target).First(&currency, "code = ?", base)
 	//result := db.Model(models.Currency{}).Preload(clause.Associations).Where("code = ?", base).First(&currency, models.CurrencyData{Base: target})
 	//result := db.Preload("Currency.CurrencyData").Preload(clause.Associations).Where("currencies.code = ? AND currency_data.base = ?", base, target).First(&currency)
-
+	//test
 	result := db.Preload("CurrencyData", "base = ?", target).Preload(clause.Associations).Where("currencies.code = ?", base).First(&currency)
 	fmt.Println(currency)
 	if result.Error != nil {
