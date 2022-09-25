@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -31,6 +33,44 @@ func (h handler) ShowCurrency(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responses.JSON(w, http.StatusCreated, currencies)
+}
+
+func (h handler) GetCurrency(w http.ResponseWriter, r *http.Request) {
+	base_list := r.URL.Query()["base"]
+	target_list := r.URL.Query()["target"]
+	var (
+		base   string
+		target string
+	)
+	if len(target_list) > 0 {
+		fmt.Println(target_list)
+		target = target_list[0]
+	}
+	if len(base_list) > 0 {
+		fmt.Println(base_list)
+		base = base_list[0]
+	}
+	if base == "" {
+		responses.ERROR(w, http.StatusBadRequest, errors.New("Required base parameter"))
+		return
+	}
+	if target != "" {
+		currency, err := currency.GetCurrencyByBaseAndTarget(base, target, h.DB)
+		if err != nil {
+			responses.ERROR(w, http.StatusNotFound, err)
+			return
+		}
+		responses.JSON(w, http.StatusAccepted, currency)
+
+	} else {
+		currency, err := currency.GetCurrencyByBase(base, h.DB)
+		if err != nil {
+			responses.ERROR(w, http.StatusNotFound, err)
+			return
+		}
+		responses.JSON(w, http.StatusAccepted, currency)
+	}
+
 }
 
 func (h handler) InsertCurrencyData(w http.ResponseWriter, r *http.Request) {

@@ -34,6 +34,7 @@ func main() {
 	router.HandleFunc("/api/currencies/list", middlewares.SetMiddlewareJSON(h.InsertCurrency)).Methods("POST")
 	router.HandleFunc("/api/currencies/data/list", middlewares.SetMiddlewareJSON(h.InsertCurrencyData)).Methods("POST")
 	router.HandleFunc("/api/currencies/data/all", middlewares.SetMiddlewareJSON(h.InsertAllCurrencyData)).Methods("POST")
+	router.HandleFunc("/api/currency/latest", middlewares.SetMiddlewareJSON(h.GetCurrency)).Methods("GET")
 
 	/*
 		router.HandleFunc("api/timeseries", middlewares.SetMiddlewareJSON()).Methods("GET")
