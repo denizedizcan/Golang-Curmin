@@ -3,14 +3,16 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/denizedizcan/Golang-Curmin/common/models"
 	"github.com/denizedizcan/Golang-Curmin/common/responses"
 	"github.com/denizedizcan/Golang-Curmin/pkg/currency"
 )
+
+const layout = "2006-01-02T15:04:05"
 
 type CurrencyList struct {
 	Succes  bool
@@ -35,6 +37,56 @@ func (h handler) ShowCurrency(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusCreated, currencies)
 }
 
+func (h handler) GetTimeCurrency(w http.ResponseWriter, r *http.Request) {
+	base_list := r.URL.Query()["base"]
+	target_list := r.URL.Query()["target"]
+	start_date_list := r.URL.Query()["start_date"]
+	end_date_list := r.URL.Query()["end_date"]
+	var (
+		base       string
+		target     string
+		start_date string
+		end_date   string
+		date_gt    time.Time
+		date_lt    time.Time
+	)
+	loc, _ := time.LoadLocation("Europe/Istanbul")
+	if len(target_list) > 0 {
+		target = target_list[0]
+	}
+	if len(base_list) > 0 {
+		base = base_list[0]
+	}
+	if len(start_date_list) > 0 {
+		start_date = start_date_list[0]
+		date_gt, _ = time.ParseInLocation(layout, start_date, loc)
+	} else {
+		date_gt, _ = time.ParseInLocation(layout, "1970-01-02T15:04:05", loc)
+	}
+	if len(end_date_list) > 0 {
+		end_date = end_date_list[0]
+		date_lt, _ = time.ParseInLocation(layout, end_date, loc)
+	} else {
+		date_lt = time.Now()
+		date_lt, _ = time.ParseInLocation(date_lt.Format(layout), layout, loc)
+	}
+	if base == "" {
+		responses.ERROR(w, http.StatusBadRequest, errors.New("Required base parameter"))
+		return
+	}
+	if target == "" {
+		responses.ERROR(w, http.StatusBadRequest, errors.New("Required target parameter"))
+		return
+	}
+	currency, err := currency.GetCurrencyBytime(base, target, date_gt, date_lt, h.DB)
+
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, currency)
+}
+
 func (h handler) GetCurrency(w http.ResponseWriter, r *http.Request) {
 	base_list := r.URL.Query()["base"]
 	target_list := r.URL.Query()["target"]
@@ -43,11 +95,9 @@ func (h handler) GetCurrency(w http.ResponseWriter, r *http.Request) {
 		target string
 	)
 	if len(target_list) > 0 {
-		fmt.Println(target_list)
 		target = target_list[0]
 	}
 	if len(base_list) > 0 {
-		fmt.Println(base_list)
 		base = base_list[0]
 	}
 	if base == "" {

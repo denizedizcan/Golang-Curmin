@@ -35,11 +35,10 @@ func main() {
 	router.HandleFunc("/api/currencies/data/list", middlewares.SetMiddlewareJSON(h.InsertCurrencyData)).Methods("POST")
 	router.HandleFunc("/api/currencies/data/all", middlewares.SetMiddlewareJSON(h.InsertAllCurrencyData)).Methods("POST")
 	router.HandleFunc("/api/currency/latest", middlewares.SetMiddlewareJSON(h.GetCurrency)).Methods("GET")
-
+	router.HandleFunc("/api/currency/timeseries", middlewares.SetMiddlewareJSON(h.GetTimeCurrency)).Methods("GET")
 	/*
-		router.HandleFunc("api/timeseries", middlewares.SetMiddlewareJSON()).Methods("GET")
-		router.HandleFunc("api/latest", middlewares.SetMiddlewareJSON()).Methods("GET")
-	*/
+
+	 */
 	http.ListenAndServe(":8080", router)
 
 }
