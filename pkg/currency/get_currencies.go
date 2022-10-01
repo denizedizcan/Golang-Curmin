@@ -8,11 +8,22 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func GetCurrencies(db *gorm.DB) ([]models.Currency, error) {
-	var currencies []models.Currency
+type CurrencyShow struct {
+	Code string `json:"code"`
+	Name string `json:"name"`
+}
+type Currrency struct {
+	Currency CurrencyShow
+}
+type CurrencyData struct {
+	Currencies []CurrencyShow
+}
 
-	if result := db.Model(models.Currency{}).Preload(clause.Associations).Find(&currencies); result.Error != nil {
-		return []models.Currency{}, result.Error
+func GetCurrencies(db *gorm.DB) ([]CurrencyShow, error) {
+	var currencies []CurrencyShow
+
+	if result := db.Model(models.Currency{}).Find(&currencies); result.Error != nil {
+		return []CurrencyShow{}, result.Error
 	}
 	return currencies, nil
 }

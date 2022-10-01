@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/denizedizcan/Golang-Curmin/common/models"
+	"github.com/denizedizcan/Golang-Curmin/common/reshape"
 	"github.com/denizedizcan/Golang-Curmin/common/responses"
 	"github.com/denizedizcan/Golang-Curmin/pkg/currency"
 )
@@ -34,7 +35,7 @@ func (h handler) ShowCurrency(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	responses.JSON(w, http.StatusCreated, currencies)
+	responses.JSON(w, http.StatusCreated, reshape.ReshapeCurrencyList(currencies))
 }
 
 func (h handler) GetTimeCurrency(w http.ResponseWriter, r *http.Request) {
