@@ -12,12 +12,6 @@ type CurrencyShow struct {
 	Code string `json:"code"`
 	Name string `json:"name"`
 }
-type Currrency struct {
-	Currency CurrencyShow
-}
-type CurrencyData struct {
-	Currencies []CurrencyShow
-}
 
 func GetCurrencies(db *gorm.DB) ([]CurrencyShow, error) {
 	var currencies []CurrencyShow
