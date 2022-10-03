@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/denizedizcan/Golang-Curmin/common/latest"
 	"github.com/denizedizcan/Golang-Curmin/common/models"
 	"github.com/denizedizcan/Golang-Curmin/common/reshape"
 	"github.com/denizedizcan/Golang-Curmin/common/responses"
@@ -111,6 +112,9 @@ func (h handler) GetCurrency(w http.ResponseWriter, r *http.Request) {
 			responses.ERROR(w, http.StatusNotFound, err)
 			return
 		}
+		if len(currency.CurrencyData) > 0 {
+			currency = latest.FindLatestTargetedData(currency)
+		}
 		responses.JSON(w, http.StatusAccepted, currency)
 
 	} else {
@@ -118,6 +122,9 @@ func (h handler) GetCurrency(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			responses.ERROR(w, http.StatusNotFound, err)
 			return
+		}
+		if len(currency.CurrencyData) > 0 {
+			currency = latest.FindLatestData(currency)
 		}
 		responses.JSON(w, http.StatusAccepted, currency)
 	}
