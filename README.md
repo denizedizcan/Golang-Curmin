@@ -52,5 +52,5 @@
 - #### **Run the Project:**
 
     You can run the project directly by running the below script from the same directory as the project:
-
+    *`cd /Golang-Curmin/cmd`*
     *`go run main.go`*
